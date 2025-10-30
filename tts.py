@@ -145,9 +145,10 @@ def tts_synthesize(
         
         import scipy.io.wavfile as wavfile
         import torch
+        import numpy as np
         
-        # Set weights_only=False for Bark models
-        torch.serialization.add_safe_globals([type(lambda: None)])
+        # Add safe globals for Bark model loading (PyTorch 2.6+ compatibility)
+        torch.serialization.add_safe_globals([np.core.multiarray.scalar, np.dtype])
         
         logger.info("Loading Bark models (first time will download 2-10GB)...")
         preload_models()
