@@ -28,6 +28,42 @@ Search for similar text segments:
 python vectordb_save.py "outputs/embeddings/your_file_embeddings.csv" --query "audiobook generation" --top-k 5
 ```
 
+## RAG Q&A (Answer Questions with LLM)
+
+Use `rag_query.py` to retrieve top-k chunks from the vector DB and ask an LLM (Gemini or OpenAI) to answer grounded in those chunks.
+
+### Prerequisites
+
+Set at least one LLM API key:
+
+```powershell
+# Gemini (preferred)
+$env:GOOGLE_API_KEY = "<YOUR_GEMINI_API_KEY>"
+
+# Or OpenAI
+$env:OPENAI_API_KEY = "<YOUR_OPENAI_API_KEY>"
+```
+
+### Run a Query
+
+```powershell
+# Auto-select provider (Gemini -> OpenAI) and show sources
+python rag_query.py --query "What is the objective of the audiobook generator?" --top-k 5 --show-sources
+
+# Force Gemini
+python rag_query.py --query "Summarize the milestones" --provider gemini --top-k 3
+
+# Force OpenAI
+python rag_query.py --query "List the workflow steps" --provider openai --top-k 5
+```
+
+The tool will:
+- Retrieve the top-k most similar text chunks from `audiobook_embeddings`
+- Build a grounded prompt with those chunks
+- Ask the selected LLM to produce a concise answer
+
+If no API key is available, it will return a preview of the retrieved context as a fallback.
+
 ## Usage
 
 ### Basic Save
